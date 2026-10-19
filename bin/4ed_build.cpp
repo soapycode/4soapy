@@ -112,8 +112,8 @@ char *arch_names[] = {
 #define PACK_DIR "../distributions"
 #define SITE_DIR "../site"
 
-#define FOREIGN "../4coder-non-source/foreign"
-#define FOREIGN_WIN "..\\4coder-non-source\\foreign"
+#define FOREIGN "../4soapy-non-source/foreign"
+#define FOREIGN_WIN "..\\4soapy-non-source\\foreign"
 
 char *includes[] = { "custom", FOREIGN "/freetype2", 0, };
 
@@ -189,7 +189,7 @@ get_defines_from_flags(Arena *arena, u32 flags){
 #define CL_LIBS_X64 CL_LIBS_COMMON FOREIGN_WIN "\\x64\\freetype.lib"
 #define CL_LIBS_X86 CL_LIBS_COMMON FOREIGN_WIN "\\x86\\freetype.lib"
 
-#define CL_ICON "..\\4coder-non-source\\res\\icon.res"
+#define CL_ICON "..\\4soapy-non-source\\res\\icon.res"
 
 internal void
 build(Arena *arena, u32 flags, u32 arch, char *code_path, char **code_files, char *out_path, char *out_file, char **defines, char **exports, char **inc_folders){
@@ -214,11 +214,11 @@ build(Arena *arena, u32 flags, u32 arch, char *code_path, char **code_files, cha
         default: InvalidPath;
     }
     
-    fm_add_to_line(line, "-I%s", code_path);
+    fm_add_to_line(line, "-I \"%s\"", code_path);
     if (inc_folders != 0){
         for (u32 i = 0; inc_folders[i] != 0; ++i){
             char *str = fm_str(arena, code_path, "/", inc_folders[i]);
-            fm_add_to_line(line, "-I%s", str);
+            fm_add_to_line(line, "-I \"%s\"", str);
         }
     }
     
@@ -285,7 +285,7 @@ build(Arena *arena, u32 flags, u32 arch, char *code_path, char **code_files, cha
     
     fm_finish_build_line(&line);
     
-    //printf("%s\n", line.build_options);
+    printf("%s\n", line.build_options);
     systemf("%s", line.build_options);
     fm_popdir(temp);
     
@@ -536,6 +536,9 @@ buildsuper(Arena *arena, char *cdir, char *file, u32 arch){
     char *build_script = fm_str(arena, "custom/bin/buildsuper_", arch_names[arch], build_script_postfix, BAT);
     
     char *build_command = fm_str(arena, "\"", cdir, "/", build_script, "\" \"", file, "\"");
+
+    printf("About to run build command: %s\n", build_command);
+    
     if (This_OS == Platform_Windows){
         build_command = fm_str(arena, "call ", build_command);
     }
@@ -655,7 +658,7 @@ package(Arena *arena, char *cdir, Tier_Code tier, Arch_Code arch){
     char *build_dir = fm_str(arena, BUILD_DIR);
     char *pack_dir = fm_str(arena, PACK_DIR);
     char *dist_files[3];
-    dist_files[0] = fm_str(arena, "../4coder-non-source/dist_files");
+    dist_files[0] = fm_str(arena, "../4soapy-non-source/dist_files");
     dist_files[1] = fm_str(arena, "ship_files");
     dist_files[2] = fm_str(arena, "ship_files_super");
     
