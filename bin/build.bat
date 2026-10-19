@@ -5,7 +5,14 @@ set me="%~dp0"
 cd %me%
 cd ..
 set src_root="%cd%"
+
+if not exist "..\build" (
+    echo Making build directory...
+    mkdir ..\build
+)
+
 cd ..\build
+
 set build_root="%cd%"
 set bin_root=%src_root%\bin
 set custom_root=%src_root%\custom
